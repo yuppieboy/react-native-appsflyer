@@ -12,7 +12,8 @@
     "react-native-appsflyer": "file:///Users/maxim/Appsflyer/projects/react-native-appsflyer",
     "react-native-button": "^1.7.1",
     "react-native-lock": "^0.4.0",
-    "react-native-popup": "^0.6.1"
+    "react-native-popup": "^0.6.1",
+    "react-native-push-notification": "^3.0.0"
   },
   "devDependencies": {
     "babel-jest": "18.0.0",

@@ -7,6 +7,7 @@ import React, { Component } from 'react';
 
 
 import appsFlyer from 'react-native-appsflyer';
+import PushNotification from 'react-native-push-notification';
 
 import Button from 'react-native-button';
 
@@ -33,10 +34,50 @@ export default class demo extends Component {
     this.initSdk                    = this.initSdk.bind(this);
     this.enableUninstallTracking    = this.enableUninstallTracking.bind(this);
     this.updateServerUninstallToken = this.updateServerUninstallToken.bind(this);
+
+    this.initSdk();
+
+    this.initPush();
   }
 
 
+  initPush(){
+    PushNotification.configure({
 
+      // (optional) Called when Token is generated (iOS and Android)
+      onRegister: function(tokenObj) {
+        console.log( 'TOKEN:', tokenObj );
+
+        this.updateServerUninstallToken(tokenObj.token);
+      },
+
+      // (required) Called when a remote or local notification is opened or received
+      onNotification: function(notification) {
+        console.log( 'NOTIFICATION:', notification );
+      },
+
+      // ANDROID ONLY: GCM Sender ID (optional - not required for local notifications, but is need to receive remote push notifications)
+      senderID: "YOUR GCM SENDER ID",
+
+      // IOS ONLY (optional): default: all - Permissions to register.
+      permissions: {
+        alert: true,
+        badge: true,
+        sound: true
+      },
+
+      // Should the initial notification be popped automatically
+      // default: true
+      popInitialNotification: true,
+
+      /**
+       * (optional) default: true
+       * - Specified if permissions (ios) and token (android and ios) will requested or not,
+       * - if not, you must call PushNotificationsHandler.requestPermissions() later
+       */
+      requestPermissions: true,
+    });
+  }
 
 
   initSdk(){
@@ -53,6 +94,8 @@ export default class demo extends Component {
         (error) => {
           console.error(error);
         })
+
+
   }
 
   enableUninstallTracking(){
@@ -65,11 +108,11 @@ export default class demo extends Component {
         })
   }
 
-  updateServerUninstallToken(){
+  updateServerUninstallToken(_token){
 
-    const  token = "xxxxxxxxxxxxx";
+    //const token = "xxxxxxxxxxxxx";
 
-    appsFlyer.updateServerUninstallToken(token,
+    appsFlyer.updateServerUninstallToken(_token,
         (response) => {
           this.setState( { ...this.state, tokenResponse: response });
         })
